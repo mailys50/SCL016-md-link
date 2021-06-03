@@ -1,47 +1,111 @@
-// // module.exports = () => {
-// //   // ...
-// // };
-//leer archivo de un directorio de forma sincrona
+const { rejects } = require("assert");
 const fs = require("fs");
-//funcion asincrona recibe un collback
-const fileReadDirect = (router) => {
-  fs.readdir(router, (error, files) => {
-    if (error) {
-      throw error;
-    }
-    console.log(files);
+const path = require("path");
+const { resolve } = require("path");
+
+
+
+// // //Para verificar si un archivo o carpeta existe utiliza el método stat del módulo fs:
+const validateRouter = (router) => {
+  return new Promise((resolve, rejects) => {
+    fs.stat(router, function (err) {
+      if (err == null) {
+        resolve(true);
+      } else if (err.code == "ENOENT") {
+        resolve(false);
+      } else {
+        rejects(err); // ocurrió algún error
+      }
+    });
   });
 };
-fileReadDirect("./");
 
-//leer archivo
-const fileRead = (router, encode) => {
-  fs.readFile(router, encode, (error, archivo) => {
-    if (error) {
-      throw error;
-    }
-    console.log(archivo);
-  });
-  console.log("contenido del archivo...");
+const verifTypeRouter = (router) => {
+
+    fs.lstat(router, (err, stats) => {
+      if (stats.isFile()) {
+        return router;
+      }
+      if (stats.isDirectory()) {
+        return router;  //sincrono y directo
+      }
+      if (err) 
+      rejects(err);
+    });
+  
 };
 
-fileRead("./proyectos/proyectoUno.txt", "UTF-8");
+ const fileRead = (router) => {
+   return new Promise((resolve, rejects) =>{
+    fs.readFile(router, 'utf-8', (error, archivo) => {
+      if (error) {
+        rejects (error);
+      }
+      resolve(archivo); //extraer md
+    });
+    
+   })
+  
+};
 
-
-
-// //Para verificar si un archivo o carpeta existe utiliza el método stat del módulo fs:
-
-// var fs = require("fs");
-const validateRouter = (router) =>{
-fs.stat(router, function (err) {
-  if (err == null) {
-    console.log("ruta valida");
-  } else if (err.code == "ENOENT") {
-    console.log("la ruta no es valida");
-  } else {
-    console.log(err); // ocurrió algún error
+  const verifExtencion = (router) => {
+    return new Promise((resolve, rejects) => {
+        const extencion= path.extname(router);
+  if(extencion == '.md'){
+    resolve(true)
+  }else{
+    rejects(error);
   }
-});
+
+    })
+
 }
-validateRouter("./proyectos/proyectoUno.txt");
-validateRouter("./proyectos/proyectoU.txt");
+const detectarLinks = (arcchivo) => {
+  const regexp =   '^https?:\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$';
+  return  archivo.matchAll(regexp);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+const mdLinks = (router) => {
+  validateRouter(router).then((valid) => {
+    if (valid) {
+      if (path.isAbsolute(router)) {
+        verifTypeRouter(router).then((routerType) => {
+          if (routerType) {
+            verifExtencion(router).then((extMd)=>{
+              if(extMd){
+                fileRead(router).then((textArchivo) => {
+                  if (textArchivo) {
+                    detectarLinks()
+                  }
+                }) 
+              }
+            })
+          } else {
+            
+          }
+        
+        });
+      }
+    
+    } else {
+    
+    }
+  });
+}
+
+
+
+module.exports = (router) => {
+  mdLinks(path);
+};
