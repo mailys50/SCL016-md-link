@@ -1,68 +1,79 @@
-
 const fs = require("fs");
 const path = require("path");
-const readline = require('readline');
+const readline = require("readline");
 // const marked = require('marked');
 const { inflateRawSync } = require("zlib");
 
 //leer archivo
-const getLinks = (router) => {
-  
+const lecturaDeArchivos = (router) => {
   const readInterface = readline.createInterface({
-      input: fs.createReadStream(router),
-      output: process.stdout,
-      console: false
+    input: fs.createReadStream(router),
+    output: process.stdout,
+    console: false,
   });
-  readInterface.on('line', function(line) {
+  readInterface.on("line", function (line) {
     console.log(line);
-    const regexp =   '^https?:\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$';
-    
-    
-     return  router.matchAll(regexp);
+    const regexp = "^https?://[w-]+(.[w-]+)+[/#?]?.*$";
 
-});
-
-}
-
-
-getLinks('./README1.md');
-
-const detectarLinks = (archivo) => {
-  const regexp =   '^https?:\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$';
-  return  archivo.matchAll(regexp);
-}
-console.log(detectarLinks('./README1.md'));
-
+    return router.matchAll(regexp);
+  });
+};
 
 // // // //Para verificar si un archivo o carpeta existe utiliza el método stat del módulo fs:
 // const validateRouter = (router) => {
 //   return new Promise((resolve, rejects) => {
 //     fs.stat(router, function (err) {
-//       if (err == null) {
-//         resolve(true);
-//       } else if (err.code == "ENOENT") {
-//         resolve(false);
-//       } else {
+//       if (err == null && router == path.isAbsolute(router)) {
+//         console.log("ruta valida");
+//     } else if (err.code == "ENOENT") {
+//       console.log("la ruta no es valida");
+//     }  else {
 //         rejects(err); // ocurrió algún error
 //       }
 //     });
 //   });
 // };
 
-// const verifTypeRouter = (router) => {
+const leerArchivos = (router) => {
+  fs.stat(router, (err) => {
+    if (err == null) {
 
-//     fs.lstat(router, (err, stats) => {
-//       if (stats.isFile()) {
-//         return router;
-//       }
-//       if (stats.isDirectory()) {
-//         return router;  //sincrono y directo
-//       }
-//       if (err) 
-//       rejects(err);
-//     });
-  
-// };
+      console.log("ruta valida");
+
+      //es relativo convertir en absolutos
+      const pathAbsolute = path.resolve(router);
+
+      //Ulilizamos stats para saber si es archivo o carpeta
+      const statsFile = fs.statSync(pathAbsolute);
+
+      //si es archivo
+      if (statsFile.isFile()) {
+        const exist = statsFile.isFile(pathAbsolute);
+        if (exist) {
+          //es relativo convertir en absolutos
+          const pathAbsolute = path.resolve(router);
+          //Ulilizamos stats para saber si es archivo o carpeta
+          const statsFile = fs.statSync(pathAbsolute);
+          lecturaDeArchivos(router);
+        } //si es carpeta
+      } else if (statsFile.isDirectory()) {
+        const files = fs.readdirSync(pathAbsolute);
+
+        files.map((file) => {
+          readFile(route + "/" + file);
+        });
+      }
+      lecturaDeArchivos(router);
+    } else if (err.code == "ENOENT") {
+      console.log("la ruta no es valida");
+    } else {
+      console.log(err); // ocurrió algún error
+    }
+  });
+};
+leerArchivos("./README1.md");
+
+var mdLinks = function mdLinks(path, options) {};
 
 //  const fileRead = (router) => {
 //    return new Promise((resolve, rejects) =>{
@@ -72,10 +83,12 @@ console.log(detectarLinks('./README1.md'));
 //       }
 //       resolve(archivo); //extraer md
 //     });
-    
+
 //    })
-  
+
 // };
+
+
 
 //   const verifExtencion = (router) => {
 //     return new Promise((resolve, rejects) => {
@@ -94,7 +107,7 @@ console.log(detectarLinks('./README1.md'));
 //   return  archivo.matchAll(regexp);
 // }
 
-// const getLinks = (router) => {
+// const lecturaDeArchivos = (router) => {
 //   const readInterface = readline.createInterface({
 //       input: fs.createReadStream('/README.md'),
 //       output: process.stdout,
@@ -103,13 +116,11 @@ console.log(detectarLinks('./README1.md'));
 
 // }
 
-
 // module.exports = (router) => {
 //   mdLinks(path);
 // };
 
 // //extraer links sin funcionar
-
 
 // var extractLinks = (array) => {
 //   console.log(array);
@@ -137,3 +148,9 @@ console.log(detectarLinks('./README1.md'));
 // var url = window.location.href
 // console.log(url)
 // }
+
+// const detectarLinks = (archivo) => {
+//   const regexp =   '^https?:\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$';
+//   return  archivo.matchAll(regexp);
+// }
+// console.log(detectarLinks('./README1.md'));
