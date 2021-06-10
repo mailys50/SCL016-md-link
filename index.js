@@ -1,7 +1,8 @@
 //impotar librerias de NODE
 const fs = require("fs");
 const path = require("path");
-const readline = require("readline");
+// const readline = require("readline");
+const indexModule = {};
 // const marked = require('marked');
 
 const fileRead = (pathAbsolute) => {
@@ -18,9 +19,17 @@ const fileRead = (pathAbsolute) => {
 // //leer contenido del archivo linea por linea
 const extraerLinksDelContenido = (file) => {
   // console.log(file);
-  const regexp = /(https?:\/\/[^\s)]+)[^,). ]/g;
+  const regexp =/(https?:\/\/[^\s)]+)[^,). ]/g;
+
   //realizar la busqueda de links
   return file.matchAll(regexp);
+};
+const extraerTextLinks = (file) => {
+  // console.log(file);
+  const regexptext = /\[([^\]]+)]/g;
+
+  //realizar la busqueda de links
+  return file.matchAll(regexptext);
 };
 
 //leer Archivo
@@ -41,20 +50,25 @@ const leerRuta = (router) => {
               .then((resultFileRead) => {
                 let links = [];
                 let index = 0;
+                // let texts =[];
                 //extraer links y guardar en constante <url
                 for (const url of extraerLinksDelContenido(resultFileRead)) {
-                  const obj = {
-                    //atributos del objeto
-                    href: url[0],
-                    text: resultFileRead,
-                    file: pathAbsolute,
-                  };
-                  //llenar array con el obj
-                  links[index] = obj;
-                  index++;
+                  for (const text of extraerTextLinks(resultFileRead)) {
+                    const obj = {
+                      //atributos del objeto
+                      href: url[0],
+                      text: text[0],
+                      file: pathAbsolute,
+                    };
+                    //llenar array con el obj
+                    links[index] = obj;
+                    index++;
+                  }
                 }
+                // console.log(links);
                 resolve(links);
               })
+
               .catch((err) => {
                 rejects(err);
               });
@@ -72,10 +86,8 @@ const leerRuta = (router) => {
   });
 };
 
-leerRuta("./proyectos/carpetaProyecto")
-  .then((result) => {
-    console.log(result);
-  })
-  .catch((err) => {}); //leerRuta("./proyectos/carpetaProyecto");
 
-var mdLinks = function mdLinks(path, options) {};
+indexModule.fileRead = fileRead;
+indexModule.extraerLinksDelContenido = extraerLinksDelContenido;
+indexModule.leerRuta = leerRuta;
+module.exports = indexModule;

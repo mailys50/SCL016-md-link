@@ -1,3 +1,19 @@
+[
+  {
+    "href":"https://www.google.com",
+    "text":"Google",
+    "file":"README.MD"
+  },
+  {	
+    "href":"https://www.Wikipedia.com",
+    "text":"Wikipedia",
+    "file":"README.MD"
+  }
+  ]
+  
+
+
+
 const path= require ("path");
  
 const detectarLinks = (archivo) => {

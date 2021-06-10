@@ -9,19 +9,13 @@
 const mdlinks = require('./index.js');
 const pathLib = require('path')
 const path = process.argv[2];
-const regex = /(https?:\/\/[^\s)]+)[^,). ]/g;
+console.log(path);
+
 let dirPath = pathLib.resolve(path);
 console.log(dirPath);
-let data = '';
 
-
-
-
-
-mdlinks.fileOrDir(dirPath)
+mdlinks.leerRuta(dirPath)
     .then(file => {
-        data = file.match(regex)
-        console.log(data.length);
-        return console.log(data);
-    })
+            console.log(file);
+       })
     .catch(err => console.log('error', err));
