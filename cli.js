@@ -1,21 +1,37 @@
-// const mdLinks = require('./index.js');
-// console.log(process.argv);
-// const path = process.argv[2];
-// mdLinks(path)
-// .then(file => console.log(file))
-// .catch(error => console.log( 'error', error));
-// ______________________________________________
-
 const mdlinks = require('./index.js');
 const pathLib = require('path')
-const path = process.argv[2];
-console.log(path);
+// para empezar desde la segunda posición del array
+const path2 = process.argv[2];
+const path3 =process.argv[3];
+const path4 =process.argv[4];
+const dirPath = pathLib.resolve(path2);
 
-let dirPath = pathLib.resolve(path);
-console.log(dirPath);
+const options = {
+    validate: false,
+    stats: false
+};
 
-mdlinks.leerRuta(dirPath)
-    .then(file => {
+
+if (
+    (path3 === "--validate" && path4 === "--stats") ||
+    (path3 === "--stats" && path4 === "--validate")
+) {
+    options.validate = true;
+    options.stats = true;
+} else if (path3 === "--validate") {
+    options.validate = true;
+    options.stats = false;
+} else if (path3 === "--stats") {
+    options.validate = false;
+    options.stats = true;
+} else {
+    options.validate = false;
+    options.stats = false;
+}
+
+
+mdlinks.fileReading(dirPath, options)
+    .then((file) => {
             console.log(file);
        })
     .catch(err => console.log('error', err));

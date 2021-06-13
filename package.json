@@ -21,7 +21,9 @@
   "homepage": "https://github.com/mailys50/SCL016-md-link#readme",
   "dependencies": {
     "fetch": "^1.1.0",
+    "filehound": "^1.17.4",
     "line-reader": "^0.4.0",
-    "markdown-it": "^12.0.6"
+    "markdown-it": "^12.0.6",
+    "node-fetch": "^2.6.1"
   }
 }
