@@ -6,6 +6,9 @@ const fetch = require("node-fetch");
 // const readline = require("readline");
 const indexModule = {};
 // const marked = require('marked');
+let totalLinks = 0;
+let uniqueLinks = 0;
+let brokenLinks = 0
 
 const getMdFiles = (file) => {
   let ext = path.extname(file).toLowerCase();
@@ -60,59 +63,68 @@ const fileReading = (router) => {
                   links[index] = obj;
                   index++;
                 }
-                
+
                 resolve(links);
               })
 
               .catch((err) => {
                 rejects(err);
               });
-          }else{
+          } else {
             resolve(0);
           }
 
           // }
         } else if (statsFile.isDirectory()) {
-          
           const files = fs.readdirSync(pathAbsolute);
-
           let directoryContent = [];
           files.forEach((arch, i) => {
             directoryContent[i] = fileReading(router + "/" + arch);
-
-            //recursividad
           });
           // console.log(directoryContent);
-          Promise.all(directoryContent).then((resultado) => {
-            return resultado.reduce((acc, val) => acc.concat(val),[]);
-          }).then((resu) => {
-            resolve(resu.filter(val => typeof val === 'object' ));
-          }).catch(error => {
-            recject(error);
-          });
-        
-         
+          Promise.all(directoryContent)
+            .then((resultado) => {
+              return resultado.reduce((acc, val) => acc.concat(val), []);
+            })
+            .then((resu) => {
+              resolve(resu.filter((val) => typeof val === "object"));
+            })
+            .catch((error) => {
+              recject(error);
+            });
         }
       }
     });
   });
 };
 
-
+//Estadisticas de TOTAL y UNIQUES
+const statsOption = links => {
+  return new Promise((resolve, reject) => {
+    let allLinks = links.map(link => link.href);
+    totalLinks += allLinks.length;
+    uniqueLinks += [...new Set(allLinks)].length;
+    let statsResult = {
+      total: totalLinks,
+      unique: uniqueLinks
+    };
+    resolve(statsResult);
+  });
+};
 
 
 // //Validar los links con sus status
-const validateOption = links => {
+const validateOption = (links) => {
   //console.log("LINKS:", links);
   return new Promise((resolve, reject) => {
-    let statusLinks = links.map(link => {
+    let statusLinks = links.map((link) => {
       // links.map(link => {
-      return fetch(link.href).then(res => {
+      return fetch(link.href).then((res) => {
         if (res.status === 200) {
           link.status = res.status;
           link.response = "O.K.";
           //console.log("LINK O.K.", link.response);
-        } else if(res.status === 404) {
+        } else if (res.status === 404) {
           link.status = res.status;
           link.response = res.statusText;
           link.response = "FAIL";
@@ -120,17 +132,60 @@ const validateOption = links => {
         }
       });
     });
-    Promise.all(statusLinks).then(res => {
-      resolve(links);
-      //console.log("VALIDATE:", links);
-    }).catch(err => {
-      links.status = null;
-      links.response = "FAIL";
-      resolve(links);
-      //console.log("catch:", links);
-    });
+    Promise.all(statusLinks)
+      .then((res) => {
+        resolve(links);
+        //console.log("VALIDATE:", links);
+      })
+      .catch((err) => {
+        links.status = null;
+        links.response = "FAIL";
+        resolve(links);
+        //console.log("catch:", links);
+      });
   });
 };
+const statsValidateOption = (links) => {
+  return new Promise((resolve, reject) => {
+    validateOption(links).then(link => {
+      let allLinks = link.map(link => link.href);
+      let statusLinks = links.map(link => link.response);
+      //console.log("statusLinks:", statusLinks);
+      let totalLinks = allLinks.length;
+      //console.log("totalLinks:", totalLinks);
+      uniqueLinks = [...new Set(allLinks)];
+      //console.log("uniqueLinks:", uniqueLinks);
+      brokenLinks += (statusLinks.toString().match(/FAIL/g));
+      //console.log("brokenLinks:", brokenLinks);
+      let statsResult = {
+        total: totalLinks,
+        unique: uniqueLinks.length,
+        broken: brokenLinks.length
+      }
+      //console.log("STATS RESULT 2:", statsResult);
+      if (brokenLinks === 0) {
+        statsResult = {
+          total: totalLinks,
+          unique: uniqueLinks.length,
+          broken: 0
+        }
+        resolve(statsResult);
+      } else {
+        brokenLinks = (statusLinks.toString().match(/FAIL/g)).length;
+        let statsResult = {
+          total: totalLinks,
+          unique: uniqueLinks.length,
+          broken: brokenLinks
+        }
+        resolve(statsResult);
+        //console.log("STATS RESULT:", statsResult);
+      }
+    }).catch(err => {
+      reject(err)
+      console.log(chalk.bold.red("ERROR VALIDATE STATS OPTION. TRY AGAIN"));
+    })
+  })
+}
 
 
 //Recibe ruta y verfica si es un archivo o directorio
@@ -138,24 +193,27 @@ const mdLinks = (router, options) => {
   return new Promise((resolve, rejects) => {
     if (options.validate === false && options.stats === false) {
       fileReading(router)
-        .then(resp => {
-          resolve(resp)
+        .then((resp) => {
+          resolve(resp);
         })
-        .catch(err => {
-          rejects(err)
-        })
-    }else if(options.validate===true && options.stats === false){
-      fileReading(router).then(links => {
-        validateOption(links).then(res => {
+        .catch((err) => {
+          rejects(err);
+        });
+    }else if (options.validate === false && options.stats === true) {
+      fileReading(router).then((links) => {
+        statsOption(links).then((res) => {
           resolve(res);
         });
       });
-
+    } else if (options.validate === true && options.stats === false) {
+      fileReading(router).then((links) => {
+        validateOption(links).then((res) => {
+          resolve(res);
+        });
+      });
     }
-
   });
 };
-
 
 indexModule.mdLinks = mdLinks;
 module.exports = indexModule;
