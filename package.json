@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/mailys50/SCL016-md-link#readme",
   "dependencies": {
+    "chalk": "^4.1.1",
     "fetch": "^1.1.0",
     "filehound": "^1.17.4",
     "line-reader": "^0.4.0",

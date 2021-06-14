@@ -5,6 +5,7 @@ const fetch = require("node-fetch");
 // const { log } = require("console");
 // const readline = require("readline");
 const indexModule = {};
+const chalk = require("chalk");
 // const marked = require('marked');
 let totalLinks = 0;
 let uniqueLinks = 0;
@@ -210,6 +211,15 @@ const mdLinks = (router, options) => {
         validateOption(links).then((res) => {
           resolve(res);
         });
+      });
+    }else if(options.validate === true && options.stats === true) {
+      fileReading(router).then(res => {
+        statsValidateOption(res)
+          .then(res => {
+            resolve(res);
+            //console.log("V+S:", res)
+            // console.log(chalk.bold.white("VALIDATE + STATS RESULT:" + "\n"));
+          });
       });
     }
   });

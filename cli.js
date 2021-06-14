@@ -2,8 +2,8 @@ const mdLinks = require('./index.js');
 const pathLib = require('path')
 // para empezar desde la segunda posición del array
 const path2 = process.argv[2];
-const path3 =process.argv[3];
-const path4 =process.argv[4];
+const option1 =process.argv[3];
+const option2 =process.argv[4];
 const router = pathLib.resolve(path2);
 
 const options = {
@@ -12,16 +12,13 @@ const options = {
 };
 
 
-if (
-    (path3 === "--validate" && path4 === "--stats") ||
-    (path3 === "--stats" && path4 === "--validate")
-) {
+if ((option1 === "--validate" && option2 === "--stats") || (option1 === "--stats" && option2 === "--validate")) {
     options.validate = true;
     options.stats = true;
-} else if (path3 === "--validate") {
+} else if (option1 === "--validate") {
     options.validate = true;
     options.stats = false;
-} else if (path3 === "--stats") {
+} else if (option1 === "--stats") {
     options.validate = false;
     options.stats = true;
 } else {
