@@ -2,6 +2,7 @@
 const fs = require("fs");
 const path = require("path");
 const fileHound = require("fileHound");
+const { log } = require("console");
 // const readline = require("readline");
 const indexModule = {};
 // const marked = require('marked');
@@ -59,26 +60,38 @@ const fileReading = (router) => {
                   links[index] = obj;
                   index++;
                 }
+                
                 resolve(links);
               })
 
               .catch((err) => {
                 rejects(err);
               });
+          }else{
+            resolve(0);
           }
 
           // }
-        }else if (statsFile.isDirectory()) {
+        } else if (statsFile.isDirectory()) {
           
           const files = fs.readdirSync(pathAbsolute);
+
           let directoryContent = [];
-          //i el segundo parametro del foearch representa el indice
           files.forEach((arch, i) => {
             directoryContent[i] = fileReading(router + "/" + arch);
 
             //recursividad
           });
-          resolve(directoryContent);
+          // console.log(directoryContent);
+          Promise.all(directoryContent).then((resultado) => {
+            return resultado.reduce((acc, val) => acc.concat(val),[]);
+          }).then((resu) => {
+            resolve(resu.filter(val => typeof val === 'object' ));
+          }).catch(error => {
+            recject(error);
+          });
+        
+         
         }
       }
     });

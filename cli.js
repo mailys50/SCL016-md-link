@@ -30,7 +30,7 @@ if (
 }
 
 
-mdlinks.fileReading(dirPath, options)
+mdlinks.fileReading(dirPath)
     .then((file) => {
             console.log(file);
        })
