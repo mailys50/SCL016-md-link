@@ -1,8 +1,8 @@
 //impotar librerias de NODE
 const fs = require("fs");
 const path = require("path");
-const fileHound = require("fileHound");
-const { log } = require("console");
+const fetch = require("node-fetch");
+// const { log } = require("console");
 // const readline = require("readline");
 const indexModule = {};
 // const marked = require('marked');
@@ -98,60 +98,64 @@ const fileReading = (router) => {
   });
 };
 
+
+
+
 // //Validar los links con sus status
-// const validateOption = links => {
-//   //console.log("LINKS:", links);
-//   return new Promise((resolve, reject) => {
-//     let statusLinks = links.map(link => {
-//       // links.map(link => {
-//       return fetch(link.href).then(res => {
-//         if (res.status === 200) {
-//           link.status = res.status;
-//           link.response = "O.K.";
-//           //console.log("LINK O.K.", link.response);
-//         } else if(res.status === 404) {
-//           link.status = res.status;
-//           link.response = res.statusText;
-//           link.response = "FAIL";
-//           //console.log("LINK FAIL", link.response);
-//         }
-//       });
-//     });
-//     Promise.all(statusLinks).then(res => {
-//       resolve(links);
-//       //console.log("VALIDATE:", links);
-//     }).catch(err => {
-//       links.status = null;
-//       links.response = "FAIL";
-//       resolve(links);
-//       //console.log("catch:", links);
-//     });
-//   });
-// };
-
-// //Recibe ruta y verfica si es un archivo o directorio
-// const mdlinks = (dirPath, options) => {
-//   return new Promise((resolve, rejects) => {
-//     if (options.validate === false && options.stats === false) {
-//       FileOrDirectory(dirPath)
-//         .then(resp => {
-//           resolve(resp)
-//         })
-//         .catch(err => {
-//           rejects(err)
-//         })
-//     }else if(options.validate===true && options.stats === false){
-//       FileOrDirectory(dirPath).then(links => {
-//         validateOption(links).then(res => {
-//           resolve(res);
-//         });
-//       });
-
-//     }
-
-//   });
-// };
+const validateOption = links => {
+  //console.log("LINKS:", links);
+  return new Promise((resolve, reject) => {
+    let statusLinks = links.map(link => {
+      // links.map(link => {
+      return fetch(link.href).then(res => {
+        if (res.status === 200) {
+          link.status = res.status;
+          link.response = "O.K.";
+          //console.log("LINK O.K.", link.response);
+        } else if(res.status === 404) {
+          link.status = res.status;
+          link.response = res.statusText;
+          link.response = "FAIL";
+          //console.log("LINK FAIL", link.response);
+        }
+      });
+    });
+    Promise.all(statusLinks).then(res => {
+      resolve(links);
+      //console.log("VALIDATE:", links);
+    }).catch(err => {
+      links.status = null;
+      links.response = "FAIL";
+      resolve(links);
+      //console.log("catch:", links);
+    });
+  });
+};
 
 
-indexModule.fileReading = fileReading;
+//Recibe ruta y verfica si es un archivo o directorio
+const mdLinks = (router, options) => {
+  return new Promise((resolve, rejects) => {
+    if (options.validate === false && options.stats === false) {
+      fileReading(router)
+        .then(resp => {
+          resolve(resp)
+        })
+        .catch(err => {
+          rejects(err)
+        })
+    }else if(options.validate===true && options.stats === false){
+      fileReading(router).then(links => {
+        validateOption(links).then(res => {
+          resolve(res);
+        });
+      });
+
+    }
+
+  });
+};
+
+
+indexModule.mdLinks = mdLinks;
 module.exports = indexModule;

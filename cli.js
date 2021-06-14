@@ -1,10 +1,10 @@
-const mdlinks = require('./index.js');
+const mdLinks = require('./index.js');
 const pathLib = require('path')
 // para empezar desde la segunda posición del array
 const path2 = process.argv[2];
 const path3 =process.argv[3];
 const path4 =process.argv[4];
-const dirPath = pathLib.resolve(path2);
+const router = pathLib.resolve(path2);
 
 const options = {
     validate: false,
@@ -30,7 +30,7 @@ if (
 }
 
 
-mdlinks.fileReading(dirPath)
+mdLinks.mdLinks(router, options)
     .then((file) => {
             console.log(file);
        })
