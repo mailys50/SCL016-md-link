@@ -23,6 +23,7 @@
     "chalk": "^4.1.1",
     "fetch": "^1.1.0",
     "filehound": "^1.17.4",
+    "jest": "^27.0.4",
     "line-reader": "^0.4.0",
     "markdown-it": "^12.0.6",
     "node-fetch": "^2.6.1"

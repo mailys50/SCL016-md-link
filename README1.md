@@ -1,5 +1,7 @@
 # Markdown Links
 
+Esta libreria fue creada usando Node.js,  función de leer y analizar archivos en formato Markdown desde el input de un archivo hasta un directorio. Extrae links de los archivos y los verifica el status de los links y saca estadísticas cómo total de links, links que no funcionan y unicos.
+
 ## Indice
 * [1.Plan de Acción](#1-Plan-de-Acción)
 * [2.Instalacion de Node.js](#1-Diagrama-de-flujo)
@@ -23,3 +25,19 @@ Una vez finalizada la instalación de Node.js se puede abrir una terminal, donde
 
 ## 2. Diagrama de flujo
 <img src= "./img/diagrama de flujo.png" alt="titulo" width="200"/>
+
+## Guía de Uso e Instalación
+### Instalación
+Con el comando npm i @mailys50/md-links podemos instalar directamente.
+
+La publicación de md-linksen npm.
+Docs oficiales de npm install acá.
+npm i @carolgmonteiro/md-links
+
+### Como usar
+En el archivo JS:
+
+const mdlinks = require("md-links");
+Cómo llamar a libreria desde la terminal:
+--validate
+node cli.js nombre del archivo o carpeta 
