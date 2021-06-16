@@ -1,93 +1,127 @@
- 
 //importar funciones de md-links
-const mdLinks = require('../index.js');
-
-//paths para testear
-// let filePath = "archivoDos.md";
-// let dirPath=;
-
-// let options = ;
+const {mdLinks, getMdFiles, fileRead,fileReading, extractLinksContent,statsOption } = require('../index.js');
+const fs = require("fs");
+const path = require("path");
 
 describe("probando función mdLinks", () => {
   //testeando H01 USUARIO INGRESA RUTA
-  it("deberia ser una objeto", () => {
-    expect(typeof mdLinks).toBe('object');
+  it("deberia ser una function", () => {
+    expect(typeof mdLinks).toBe('function');
    
   });
 
-  it("deberia retornar los links de una ruta que es un Directorio", () => {
-    expect.assertions(1);
-    console.log(expect.assertions(0));
-    return mdLinks.mdLinks('C:/Users/Juan Becerra/Desktop/MD_LINKS/SCL016-md-link/proyectos','undefined').then(res =>
-      expect(res).toEqual(
-        [
-          {
-            href: 'https://github.com/workshopper/learnyounode',
-            text: 'learnyounode',
-            file: 'C:/Users/Juan Becerra/Desktop/MD_LINKS/SCL016-md-link/proyectos/archivo/archivo.md'
-          },
-          {
-            href: 'https://github.com/workshopper/how-to-npm',
-            text: 'how-to-npm',
-            file: 'C:/Users/Juan Becerra/Desktop/MD_LINKS/SCL016-md-link/proyectos/archivo/archivo.md'
-          },
-          {
-            href: 'https://github.com/stevekane/promise-it-w.......ont-hurt',
-            text: 'promise-it-wont-hurt',
-            file: 'C:/Users/Juan Becerra/Desktop/MD_LINKS/SCL016-md-link/proyectos/archivo/archivo.md'
-          },
-          {
-            href: 'https://es.wikipedia.org/wiki/Markdown',
-            text: 'Markdown',
-            file: 'C:/Users/Juan Becerra/Desktop/MD_LINKS/SCL016-md-link/proyectos/archivoCarpetaDos.md'
-          },
-          {
-            href: 'https://nodejs.org/',
-            text: 'Node.js',
-            file: 'C:/Users/Juan Becerra/Desktop/MD_LINKS/SCL016-md-link/proyectos/archivoCarpetaDos.md'
-          },
-          {
-            href: 'https://user-images.githubusercontent.com/110297/42118443-b7a5f1f0-7bc8-11e8-96ad-9cc5593715a6.jpg',
-            text: 'md-links',
-            file: 'C:/Users/Juan Becerra/Desktop/MD_LINKS/SCL016-md-link/proyectos/archivoCarpetaDos.md'
-          }
-        ]
-      )
-    );
-  })
-      console.log('es directorio');
+  it("deberia retornar links de los archivos .md", () => {
+
+    return fileReading('./test/pruebas/prueba.md').then(data => {
+      console.log(data);
+      expect(data[0].href).toBe('https://user-images.githubusercontent.com/110297/42118443-b7a5f1f0-7bc8-11e8-96ad-9cc5593715a6.jpg');
+    });
+
+  });
+  it("statsOption deberia retornar total", () => {
+
+    return statsOption('./test/pruebas/prueba.md').then(data => {
       
+      expect(data[0].total).toBe(1);
+      console.log(data);
+    });
+
   });
 
+  it("deberia retornar lins de los archivos .md", () => {
 
-  it("deberia retornar que es un archivo con el path TESTE.md", () => {
-    console.log('es archivo');
+    return fileReading('./test/pruebas/prueba.md').then(data => {
+      console.log(data);
+      expect(data[0].href).toBe('https://user-images.githubusercontent.com/110297/42118443-b7a5f1f0-7bc8-11e8-96ad-9cc5593715a6.jpg');
+    });
+
   });
-  //testeando H02 ES UN ARCHIVO
-  it("deberia retornar ERR se el archivo NO es .md", () => {
-    console.log('no es archivo .md');
+  it('prueba getMdFile  prueba que si es un archivo .md ', () => {
+  
+    expect(getMdFiles('./test/pruebas/prueba.md')).toBe(true);
   });
-  it("deberia retornar el archivo .md", () => {
-    console.log('es archivo .md');
+  it('prueba getMdFile que no es un archivo md ', () => {
+  
+    expect(getMdFiles('./snuevo.txt')).toBe(false);
   });
-  //testeando H03 LEE EL ARCHIVO Y RETORNA RUTA Y LINKS
-  it("deberia retornar ERR se NO hay links retorna mensaje “no hay links”", () => {
-    console.log('no es archivo .md');
-  });
-  it("deberia retornar se hay links retorna los links", () => {
-    console.log('es archivo .md');
-  });
-  //testeando H04 VALIDATE
-  it("deberia retornar OK para los links que estan bien en el archivo .md", () => {
-    console.log('OK');
-  });
-  it("retornar FAIL para los links que estan rotos en el archivo .md", () => {
-    console.log('FAIL');
-  });
-  //testeando H05 STATS
-  it("deberia retornar cuantos links hay en total el archivo .md", () => {
-    console.log("TOTAL");
-  });
-  it("deberia retornar cuantos links son únicos el archivo .md", () => {
-    console.log('UNIQUE');
-  });
+  
+  
+ 
+// describe('fileRead', () => {
+//   it('Debería agregar total y,', () => {
+//   return statsOption().then((statsResult) => {
+//     console.log(statsOption())
+//   expect(statsResult._data.total).toBe('comprar pan')
+//   })
+//   });
+//   })
+
+// // describe('delteNote', () => {
+// // it('Debería poder eliminar una nota con id: 5828258218', () => {
+// // return deleteNote('5828258218').then((comment) => {
+// // expect(comment).toBe(undefined)
+// // })
+// // });
+// // })
+
+
+
+// const firebasemock = require('firebase-mock');
+// const mockauth = new firebasemock.MockFirebase();
+// const mockfirestore = new firebasemock.MockFirestore();
+// mockfirestore.autoFlush();
+// mockauth.autoFlush();
+
+// global.firebase = firebasemock.MockFirebaseSdk(
+//   // use null if your code does not use RTDB
+//   () => null,
+//   () => mockauth,
+//   () => mockfirestore
+// );
+
+
+
+// import { signIn } from '../src/lib/index.js';
+
+// describe('probando signIn', () => {
+//   it('Debería poder iniciar sesion', () => {
+//     return signIn('juan@gmail.com', '123456').then((user) => {
+//         expect(user.email).toBe('juan@gmail.com')
+//       })
+//   });
+// })
+
+
+
+
+
+
+
+//   test('statsOption prepara un estado valido', () => {
+//     expect.hasAssertions();
+//     statsOption(state => {
+//       console.log(stat);
+//       expect(validateState(stat)).toBeTruthy();
+//     });
+//     return waitOnState();
+//   });
+
+//   test("deberia retornar los links de una ruta de un Directorio", () => {
+//     expect.
+//     return mdLinks('./test/pruebas/prueba.md','undefined').then(res =>
+//       expect(res).toEqual(
+//         [
+          
+//           {
+//             href: 'https://user-images.githubusercontent.com/110297/42118443-b7a5f1f0-7bc8-11e8-96ad-9cc5593715a6.jpg',
+//             text: 'md-links',
+//             file: 'C:/Users/Juan Becerra/Desktop/MD_LINKS/SCL016-md-link/proyectos/archivoCarpetaDos.md'
+//           }
+//         ]
+//       )
+//     );
+//   })
+    
+      
+ });
+

@@ -2,7 +2,6 @@
 const fs = require("fs");
 const path = require("path");
 const fetch = require("node-fetch");
-const indexModule = {};
 const chalk = require("chalk");
 
 let totalLinks = 0;
@@ -81,7 +80,7 @@ const fileReading = (router) => {
           // console.log(directoryContent);
           Promise.all(directoryContent)
             .then((resultado) => {
-              console.log(resultado);
+              // console.log(resultado);
               return resultado.reduce((acc, val) => acc.concat(val), []);
               
             })
@@ -138,6 +137,7 @@ const validateOption = (links) => {
       });
   });
 };
+
 const statsValidateOption = (links) => {
   return new Promise((resolve, reject) => {
     validateOption(links)
@@ -208,5 +208,5 @@ const mdLinks = (router, options) => {
   });
 };
 
-indexModule.mdLinks = mdLinks;
-module.exports = indexModule;
+
+module.exports = {mdLinks, getMdFiles,fileRead,fileReading,extractLinksContent  };
