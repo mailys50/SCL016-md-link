@@ -111,6 +111,7 @@ const statsOption = (links) => {
   });
 };
 
+
 // //Validar los links con sus status
 const validateOption = (links) => {
   return new Promise((resolve) => {
@@ -209,4 +210,4 @@ const mdLinks = (router, options) => {
 };
 
 
-module.exports = {mdLinks, getMdFiles,fileRead,fileReading,extractLinksContent  };
+module.exports = {mdLinks, getMdFiles,fileRead,fileReading,extractLinksContent,statsOption  };
