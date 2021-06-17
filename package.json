@@ -7,8 +7,9 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --verbose --coverage"
   },
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mailys50/SCL016-md-link.git"

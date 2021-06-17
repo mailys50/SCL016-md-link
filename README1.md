@@ -32,7 +32,7 @@ Con el comando npm i @mailys50/md-links podemos instalar directamente.
 
 La publicación de md-linksen npm.
 Docs oficiales de npm install acá.
-npm i @carolgmonteiro/md-links
+npm i @mailys50/md-links
 
 ### Como usar
 En el archivo JS:
