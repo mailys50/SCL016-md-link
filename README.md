@@ -37,12 +37,12 @@ Una vez finalizada la instalación de Node.js se puede abrir una terminal, donde
 
 
 ## 4. Instalación de dependencias
- [librerias de node](https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode)
+ La documentacíon de estas dependencias la encontraras [Aqui](https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode)
 
 
- $ npm install --save-dev jest  
- $ npm i chalk 
- $ npm install node-fetch
+ ### $ npm install --save-dev jest  
+ ### $ npm i chalk  
+ ### $ npm install node-fetch
 
 ## 5. Guía de Uso e Instalación de la librería
 ### Instalación
