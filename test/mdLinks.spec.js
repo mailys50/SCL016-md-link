@@ -1,7 +1,7 @@
 const { mdLinks } = require("../index.js");
 const fs = require("fs");
 const path = require("path");
-jest.setTimeout(15000)
+jest.setTimeout(20000)
 
 describe("probando función mdLinks", () => {
   //testeando H01 USUARIO INGRESA RUTA
@@ -101,4 +101,6 @@ describe("probando función mdLinks", () => {
       )
     );
   })
+  
+
 });

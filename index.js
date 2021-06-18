@@ -4,6 +4,7 @@ const path = require("path");
 const fetch = require("node-fetch");
 const chalk = require("chalk");
 
+
 let totalLinks = 0;
 let uniqueLinks = 0;
 let brokenLinks = 0;
@@ -36,7 +37,6 @@ const fileReading = (router) => {
   return new Promise((resolve, rejects) => {
     fs.stat(router, (err, stats) => {
       if (err == null) {
-        // console.log("ruta valida");
         const pathAbsolute = path.resolve(router).replace(/\\/g, "/"); //es relativo convertir en absolutos
         const statsFile = fs.statSync(pathAbsolute); //Ulilizamos stats para saber si es archivo o carpeta
 
@@ -47,7 +47,6 @@ const fileReading = (router) => {
               .then((resultFileRead) => {
                 let links = [];
                 let index = 0;
-
                 //extraer links y guardar en constante <url
                 for (const url of extractLinksContent(resultFileRead)) {
                   const obj = {
@@ -69,18 +68,15 @@ const fileReading = (router) => {
             resolve(0);
           }
 
-          // }
+           
         } else if (statsFile.isDirectory()) {
           const files = fs.readdirSync(pathAbsolute);
           let directoryContent = [];
           files.forEach((arch, i) => {
             directoryContent[i] = fileReading(router + "/" + arch);
-            // console.log(arch);
           });
-          // console.log(directoryContent);
           Promise.all(directoryContent)
             .then((resultado) => {
-              // console.log(resultado);
               return resultado.reduce((acc, val) => acc.concat(val), []);
               
             })
@@ -210,4 +206,6 @@ const mdLinks = (router, options) => {
 };
 
 
-module.exports = {mdLinks, getMdFiles,fileRead,fileReading,extractLinksContent,statsOption  };
+
+
+module.exports = {mdLinks, getMdFiles,fileRead,fileReading,extractLinksContent,statsOption,validateOption, statsValidateOption  };
