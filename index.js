@@ -4,7 +4,6 @@ const path = require("path");
 const fetch = require("node-fetch");
 const chalk = require("chalk");
 
-
 let totalLinks = 0;
 let uniqueLinks = 0;
 let brokenLinks = 0;
@@ -67,8 +66,6 @@ const fileReading = (router) => {
           } else {
             resolve(0);
           }
-
-           
         } else if (statsFile.isDirectory()) {
           const files = fs.readdirSync(pathAbsolute);
           let directoryContent = [];
@@ -78,9 +75,8 @@ const fileReading = (router) => {
           Promise.all(directoryContent)
             .then((resultado) => {
               return resultado.reduce((acc, val) => acc.concat(val), []);
-              
             })
-            
+
             .then((resu) => {
               resolve(resu.filter((val) => typeof val === "object"));
             })
@@ -106,7 +102,6 @@ const statsOption = (links) => {
     resolve(statsResult);
   });
 };
-
 
 // //Validar los links con sus status
 const validateOption = (links) => {
@@ -205,7 +200,13 @@ const mdLinks = (router, options) => {
   });
 };
 
-
-
-
-module.exports = {mdLinks, getMdFiles,fileRead,fileReading,extractLinksContent,statsOption,validateOption, statsValidateOption  };
+module.exports = {
+  mdLinks,
+  getMdFiles,
+  fileRead,
+  fileReading,
+  extractLinksContent,
+  statsOption,
+  validateOption,
+  statsValidateOption,
+};

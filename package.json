@@ -13,7 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/mailys50/SCL016-md-link.git"
   },
-  "author": "Mailys Brizuela",
+  "author": "mailys",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/mailys50/SCL016-md-link/issues"
@@ -21,7 +21,6 @@
   "homepage": "https://github.com/mailys50/SCL016-md-link#readme",
   "dependencies": {
     "chalk": "^4.1.1",
-    "color": "^3.1.3",
     "fetch": "^1.1.0",
     "filehound": "^1.17.4",
     "line-reader": "^0.4.0",
@@ -31,5 +30,4 @@
   "devDependencies": {
     "jest": "^27.0.4"
   }
-  
 }

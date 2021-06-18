@@ -12,7 +12,7 @@ Encuentra (lee) los archivos con extensión ".md". *Muestra en la terminal todos
 * [3. Descarga e instalacón de NODE](#3-descarga-e-instalacón-de-node)
 * [4. Instalación de dependencias](#4-instalación-de-dependencias)
 * [5. Guía de Uso e Instalación de la librería](#5-guía-de-uso-e-instalación-de-la-librería)
-* [6. Respuesta en la terminal segun opción seleccionada](#6-respuesta-en-la-terminal-segun-opción-seleccionada)
+* [a. Respuesta en la terminal segun opción seleccionada](#a-respuesta-en-la-terminal-segun-opción-seleccionada)
 ***
 
 ## 1. Plan de Acción
@@ -44,13 +44,10 @@ Una vez finalizada la instalación de Node.js se puede abrir una terminal, donde
  ### $ npm i chalk  
  ### $ npm install node-fetch
 
-## 5. Guía de Uso e Instalación de la librería
-### Instalación
-Con el comando
+## 5. Guía de Uso 
 
- npm install @mailys50/md-links podemos instalar directamente.
                                  
-## 6. Respuesta en la terminal segun opción seleccionada
+## a. Respuesta en la terminal segun opción seleccionada
 Respueta obtenida con la opción:
  ## --validate
 <img src= "./img/validate.jpg" alt="titulo" width="200"/>
